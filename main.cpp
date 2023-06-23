@@ -5,7 +5,7 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode(500, 500), "cosmodog");
     window.setFramerateLimit(60);
-    
+    std::cout << "privet matvey\n";
     while (window.isOpen())
     {
         sf::Event event;
@@ -14,7 +14,7 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-
+        
         window.clear();
         window.display();
     }
