@@ -1,15 +1,23 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Point.hpp"
+#include "Planet.hpp"
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Time.hpp>
 
 int main()
 {
-
+    Point dog(100, 50, 3, 20, 0); //spaceship
+    Planet satellite(vector_t(100, 100));
+    
     sf::CircleShape spaceship; //point of spaceship
+    sf::CircleShape moon; //point of planet
     spaceship.setRadius(10);
-    Point dog(30, 20, 3, 20, 20);
+    moon.setRadius(20);
+    moon.setFillColor(sf::Color(100, 250, 50));
+    moon.setPosition(satellite.getPosition());
+    
+    
     sf::RenderWindow window(sf::VideoMode(500, 500), "cosmodog");
     window.setFramerateLimit(60);
     sf::Clock clock; //to measure time of the cycle
@@ -17,8 +25,8 @@ int main()
     {
         sf::Time loop = clock.getElapsedTime();
         clock.restart();
-        dog.update(vector_t(0,0), loop.asSeconds());
         spaceship.setPosition(dog.getPosition());
+        dog.update(satellite.getAcceleration(dog.getPosition()), loop.asSeconds());
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -27,6 +35,7 @@ int main()
         }
         window.clear();
         window.draw(spaceship);
+        window.draw(moon);
         window.display();
 
     }

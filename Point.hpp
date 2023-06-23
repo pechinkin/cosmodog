@@ -20,8 +20,8 @@ public:
         m_position.x += m_speed.x * time;
         m_position.y += m_speed.y * time;
         std::cout << m_position.x << ' ' << m_position.y << ' ' << time << std::endl;
-        m_speed.x += acceleration.x * time;
-        m_speed.y += acceleration.y * time;
+        m_speed.x += acceleration.x * time * 2e4;
+        m_speed.y += acceleration.y * time * 2e4;
     };
     
     vector_t getPosition(){
