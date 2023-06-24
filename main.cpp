@@ -7,13 +7,23 @@
 
 int main()
 {
-    Point dog(100, 50, 3, 20, 0); //spaceship
-    Planet satellite(vector_t(100, 100));
+    Planet satellite(vector_t(100, 100), 500000);
     
+    vector_t dog_position{50, 50};
+    vector_t velocity = computeVelocityForRotating( satellite.getPosition(),
+                                                    dog_position,
+                                                    satellite.getAcceleration(dog_position));
+
+    velocity = velocity * 1.0f;
+
+    Point dog(dog_position.x, dog_position.y, 1, velocity.x, velocity.y); //spaceship
+
     sf::CircleShape spaceship; //point of spaceship
     sf::CircleShape moon; //point of planet
     spaceship.setRadius(10);
+    spaceship.setOrigin(5, 5);
     moon.setRadius(20);
+    moon.setOrigin(10, 10);
     moon.setFillColor(sf::Color(100, 250, 50));
     moon.setPosition(satellite.getPosition());
     
