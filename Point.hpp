@@ -1,8 +1,11 @@
 #pragma once
+
+#include <cmath>
+
 using vector_t = sf::Vector2f;
 using shape_t = sf::ConvexShape;
 using key_tt = sf::Keyboard::Key;
-#include <cmath>
+
 #define RAD           M_PI/180
 
 class Point

@@ -28,36 +28,65 @@ std::ostream& operator<<(std::ostream& cout, const vector_t& vec)
 	cout << '[' << vec.x << ", " << vec.y << ']';
 }
 
+circle_t createPlanet(const vector_t& position, float R, const color_t& color)
+{
+	circle_t planet_view;
+	planet_view.setRadius(R);
+    planet_view.setOrigin(R/2, R/2);
+    planet_view.setFillColor(color);
+    planet_view.setPosition(position);
+
+    return planet_view;
+}
+
 class Planet
 {
+// [default parameters]
+
 	static const float GravityConst;
+	static const float DefaultRadius;
+	static const float DefaultMass;
+	static const color_t DefaultColor;
+
+// [model]
+
 	const float m_mass;
     const float m_radius;
 	const vector_t m_position;
-    circle_t &m_planet;
+
+// [view]
     
+    circle_t m_planet_view;
 
 public:
 
-    Planet(circle_t &planet, const vector_t& position, float radius, color_t color, float mass = 1)
-	:
-		m_position{position},
-		m_mass{mass},
-        m_radius{radius},
-        m_planet{planet}
-	{
-        m_planet.setRadius(20);
-        m_planet.setOrigin(10, 10);
-        m_planet.setFillColor(color_t(100, 250, 50));
-        m_planet.setPosition(m_position);
-    }
+    Planet(	const vector_t& position,
+    		float radius = DefaultRadius,
+    		const color_t& color = DefaultColor,
+    		float mass = DefaultMass);
 
 	vector_t getAcceleration(const vector_t& object_position) const;
 
 	vector_t getPosition() const;
+
+	circle_t getPlanetView() const;
 };
 
-const float Planet::GravityConst = 1; 
+const float Planet::GravityConst = 1;
+const float Planet::DefaultRadius = 30;
+const float Planet::DefaultMass = 1;
+const color_t Planet::DefaultColor = color_t::Green;
+
+Planet::Planet(	const vector_t& position,
+	    		float radius,
+	    		const color_t& color,
+	    		float mass)
+:
+	m_position{position},
+	m_mass{mass},
+    m_radius{radius},
+    m_planet_view{createPlanet(position, radius, color)}
+{}
 
 vector_t Planet::getAcceleration(const vector_t& object_position) const
 {
@@ -72,6 +101,11 @@ vector_t Planet::getAcceleration(const vector_t& object_position) const
 vector_t Planet::getPosition() const
 {
 	return m_position;
+}
+
+circle_t Planet::getPlanetView() const
+{
+	return m_planet_view;
 }
 
 std::ostream& operator<<(std::ostream& cout, const Planet& planet)
@@ -98,4 +132,15 @@ vector_t computeVelocityForRotating(const vector_t& planet_position,
 	velocity *= sqrt(sqrt(a_square * R_square));
 
 	return velocity;
+}
+
+bool AreIntersect(const vector_t& point, const vector_t& circle_center, float R)
+{
+	vector_t distance = point - circle_center;
+	return dot(distance, distance) <= R*R;
+}
+
+void draw(sf::RenderWindow& window, const Planet& planet)
+{
+	window.draw(planet.getPlanetView());
 }

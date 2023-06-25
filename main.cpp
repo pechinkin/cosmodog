@@ -8,8 +8,7 @@
 
 int main()
 {
-    circle_t moon; //point of planet
-    Planet satellite(moon, vector_t(100, 100), 20.0, color_t(100, 250, 50), 10);
+    Planet satellite(vector_t{100, 100});
     
     vector_t dog_position{50, 50};
     vector_t velocity = computeVelocityForRotating( satellite.getPosition(),
@@ -40,7 +39,7 @@ int main()
         }
         window.clear();
         window.draw(dog_shape);
-        window.draw(moon);
+        draw(window, satellite);
         window.display();
     }
 
