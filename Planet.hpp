@@ -5,6 +5,8 @@
 #include <iostream>
 
 using vector_t = sf::Vector2f;
+using color_t = sf::Color;
+using circle_t = sf::CircleShape;
 
 float dot(const vector_t& left, const vector_t& right)
 {
@@ -30,15 +32,25 @@ class Planet
 {
 	static const float GravityConst;
 	const float m_mass;
+    const float m_radius;
 	const vector_t m_position;
+    circle_t &m_planet;
+    
 
 public:
 
-	Planet(const vector_t& position, float mass = 1)
+    Planet(circle_t &planet, const vector_t& position, float radius, color_t color, float mass = 1)
 	:
 		m_position{position},
-		m_mass{mass}
-	{}
+		m_mass{mass},
+        m_radius{radius},
+        m_planet{planet}
+	{
+        m_planet.setRadius(20);
+        m_planet.setOrigin(10, 10);
+        m_planet.setFillColor(color_t(100, 250, 50));
+        m_planet.setPosition(m_position);
+    }
 
 	vector_t getAcceleration(const vector_t& object_position) const;
 

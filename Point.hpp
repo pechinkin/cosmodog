@@ -1,11 +1,18 @@
 #pragma once
 using vector_t = sf::Vector2f;
+using shape_t = sf::ConvexShape;
+using key_tt = sf::Keyboard::Key;
+#include <cmath>
+#define RAD           M_PI/180
 
-class Point{
+class Point
+{
     
 private:
     vector_t m_speed;
     vector_t m_position;
+    shape_t &m_ship;
+    float angle;
     const float m_mass;
 
     void dump() const
@@ -16,24 +23,29 @@ private:
 
 public:
     
-    Point(float x, float y, float mass, float vx, float vy): m_mass{mass} {
-        m_position.x = x;
-        m_position.y = y;
-        m_speed.x = vx;
-        m_speed.y = vy;
+    Point(vector_t coordinates, vector_t v, float mass, shape_t &aircraft): m_position{coordinates},
+        m_speed{v},
+        m_mass{mass},
+        m_ship{aircraft}
+    {
+        angle = 0;
+        m_ship.setPointCount(3);
+        m_ship.setPoint(0, vector_t(0, 0));
+        m_ship.setPoint(1, vector_t(0, 10));
+        m_ship.setPoint(2, vector_t(30, 5));
+        m_ship.setOrigin(10, 5);
+        m_ship.setPosition(m_position);
     };
     
-    void update(vector_t acceleration, float time){
-        m_position.x += m_speed.x * time;
-        m_position.y += m_speed.y * time;
-        m_speed.x += acceleration.x * time;
-        m_speed.y += acceleration.y * time;
-
-        std::cout << "Acceleration: " << acceleration.x << ' ' << acceleration.y << ' ' << time << std::endl;
-        dump();
+    void update(vector_t acceleration, float time)
+    {
+        m_position += m_speed * time;
+        m_ship.setPosition(m_position);
+        addVelocity(acceleration, time);
     };
 
-    vector_t getPosition(){
+    vector_t getPosition() const
+    {
         return m_position;
     };
 
@@ -44,7 +56,30 @@ public:
     
     void addVelocity(vector_t boost, float time)
     {
-        m_position.x += boost.x * time;
-        m_position.y += boost.y * time;
+        m_speed += boost * time;
     }
+    
+    void processInput(float time)
+    {
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        {
+            m_ship.rotate(1);
+        }
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        {
+            m_ship.rotate(-1);
+        }
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        {
+            float angle_of_ship = m_ship.getRotation()*RAD;
+            addVelocity(vector_t(2*std::cos(angle_of_ship),
+                                 2*std::sin(angle_of_ship)), time);
+        }
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        {
+            float angle_of_ship = m_ship.getRotation()*RAD;
+            addVelocity(vector_t(-2*std::cos(angle_of_ship),
+                                 -2*std::sin(angle_of_ship)), time);
+        }
+    };
 };
