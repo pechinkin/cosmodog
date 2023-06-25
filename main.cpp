@@ -4,10 +4,18 @@
 #include "Planet.hpp"
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Time.hpp>
-
+#include <vector>
 
 int main()
 {
+    std::vector<Planet> planets
+    {
+        {{80, 80}, 10, color_t{220, 220, 220}, 100}, // Mercury
+        {{120, 120}, 15, color_t{220, 20, 60}, 1200}, // Venus
+        {{250, 250}, 14, color_t::Green, 3000}, // Earth
+        {{330, 330}, 20, color_t::Red, 1500}  // Mars
+    };
+
     Planet satellite(vector_t{100, 100});
     
     vector_t dog_position{50, 50};
@@ -28,7 +36,15 @@ int main()
         clock.restart();
         float time = loop.asSeconds();
         
-        dog.update(satellite.getAcceleration(dog.getPosition()), time);
+        vector_t acceleration{};
+
+        vector_t dog_position = dog.getPosition();
+        for (const Planet& planet : planets)
+        {
+            acceleration += planet.getAcceleration(dog_position);
+        }
+
+        dog.update(acceleration, time);
         dog.processInput(time);
         
         sf::Event event;
@@ -37,9 +53,15 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+
         window.clear();
         window.draw(dog_shape);
-        draw(window, satellite);
+
+        for (const Planet& planet : planets)
+        {
+            draw(window, planet);
+        }
+        
         window.display();
     }
 
