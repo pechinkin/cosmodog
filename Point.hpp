@@ -1,7 +1,4 @@
 #pragma once
-#include <cmath>
-#define PI           3.14159265358979323846  /* pi */
-
 using vector_t = sf::Vector2f;
 
 class Point{
@@ -47,7 +44,7 @@ public:
     
     void addVelocity(vector_t boost, float time)
     {
-        m_speed.x += boost.x * time;
-        m_speed.y += boost.y * time;
+        m_position.x += boost.x * time;
+        m_position.y += boost.y * time;
     }
 };

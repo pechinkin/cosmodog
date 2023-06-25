@@ -5,6 +5,7 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Time.hpp>
 #include <cmath>
+#define RAD           3.14159265358979323846/180
 
 int main()
 {
@@ -50,13 +51,15 @@ int main()
         }
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
         {
-//            float angle_of_ship = spaceship.getRotation();
-//            dog.addVelocity(vector_t(0, 0), loop.asSeconds());
+            float angle_of_ship = spaceship.getRotation()*RAD;
+            dog.addVelocity(vector_t(2*std::cos(angle_of_ship),
+                                     2*std::sin(angle_of_ship)), loop.asSeconds());
         }
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
         {
-//            float angle_of_ship = spaceship.getRotation();
-//            dog.addVelocity(vector_t(0, 0), loop.asSeconds());
+            float angle_of_ship = spaceship.getRotation()*RAD;
+            dog.addVelocity(vector_t(2*std::cos(angle_of_ship),
+                                     2*std::sin(angle_of_ship)), loop.asSeconds());
         }
         sf::Event event;
         while (window.pollEvent(event))
@@ -73,7 +76,3 @@ int main()
 
     return 0;
 }
-
-// test compapibility
-
-
