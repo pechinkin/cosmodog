@@ -25,7 +25,7 @@ vector_t normalize(const vector_t& vec)
 
 std::ostream& operator<<(std::ostream& cout, const vector_t& vec)
 {
-	cout << '[' << vec.x << ", " << vec.y << ']';
+	return cout << '[' << vec.x << ", " << vec.y << ']';
 }
 
 circle_t createPlanet(const vector_t& position, float R, const color_t& color)
@@ -50,9 +50,9 @@ class Planet
 
 // [model]
 
-	const float m_mass;
-    const float m_radius;
 	const vector_t m_position;
+	const float m_radius;
+	const float m_mass;
 
 // [view]
     
@@ -70,6 +70,8 @@ public:
 	vector_t getPosition() const;
 
 	circle_t getPlanetView() const;
+
+	float getRadius() const;
 };
 
 const float Planet::GravityConst = 1;
@@ -83,8 +85,8 @@ Planet::Planet(	const vector_t& position,
 	    		float mass)
 :
 	m_position{position},
-	m_mass{mass},
     m_radius{radius},
+    m_mass{mass},
     m_planet_view{createPlanet(position, radius, color)}
 {}
 
@@ -108,9 +110,14 @@ circle_t Planet::getPlanetView() const
 	return m_planet_view;
 }
 
+float Planet::getRadius() const
+{
+	return m_radius;
+}
+
 std::ostream& operator<<(std::ostream& cout, const Planet& planet)
 {
-	cout << planet.getPosition();
+	return cout << planet.getPosition();
 }
 
 /*
