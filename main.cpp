@@ -1,13 +1,22 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "Point.hpp"
-#include "Planet.hpp"
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Time.hpp>
+#include "Point.hpp"
+#include "Planet.hpp"
+#include "Star.hpp"
 #include <vector>
+#include <cstdlib>
+#include <ctime>
 
 int main()
 {
+    srand(time(0)); //for randomizing
+    std::vector<Star> stars
+    {
+        {}, {}, {}, {}, {}, {}, {}, {}
+    };
+    
     std::vector<Planet> planets
     {
         {{80, 150}, 10, color_t{220, 220, 220}, 1000}, // Mercury
@@ -82,6 +91,10 @@ int main()
     // [draw]
 
         window.clear();
+        for (const Star& star : stars)
+        {
+            draw(window, star);
+        }
         draw(window, dog);
 
         for (const Planet& planet : planets)
