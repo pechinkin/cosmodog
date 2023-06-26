@@ -21,8 +21,7 @@ int main()
     vector_t dog_position{300, 100};
     vector_t dog_velocity{0, 0};
 
-    shape_t dog_shape;
-    Point dog(dog_position, dog_velocity, 1, dog_shape);
+    Point dog(dog_position, dog_velocity, 1);
     
     sf::RenderWindow window(sf::VideoMode(500, 500), "cosmodog");
     window.setFramerateLimit(60);
@@ -83,7 +82,7 @@ int main()
     // [draw]
 
         window.clear();
-        window.draw(dog_shape);
+        draw(window, dog);
 
         for (const Planet& planet : planets)
         {

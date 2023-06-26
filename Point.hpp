@@ -14,8 +14,7 @@ class Point
 private:
     vector_t m_speed;
     vector_t m_position;
-    shape_t &m_ship;
-    float angle;
+    shape_t m_ship;
     const float m_mass;
 
     void dump() const
@@ -26,12 +25,10 @@ private:
 
 public:
     
-    Point(vector_t coordinates, vector_t v, float mass, shape_t &aircraft): m_position{coordinates},
+    Point(vector_t coordinates, vector_t v, float mass): m_position{coordinates},
         m_speed{v},
-        m_mass{mass},
-        m_ship{aircraft}
+        m_mass{mass}
     {
-        angle = 0;
         m_ship.setPointCount(3);
         m_ship.setPoint(0, vector_t(0, 0));
         m_ship.setPoint(1, vector_t(0, 10));
@@ -50,6 +47,11 @@ public:
     vector_t getPosition() const
     {
         return m_position;
+    };
+    
+    shape_t getShape() const
+    {
+        return m_ship;
     };
 
     void setVelocity(const vector_t& new_velocity)
@@ -85,4 +87,10 @@ public:
                                  -2*std::sin(angle_of_ship)), time);
         }
     };
+    
+};
+
+const void draw (sf::RenderWindow& window, const Point& dog)
+{
+    window.draw(dog.getShape());
 };
