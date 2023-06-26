@@ -5,14 +5,14 @@ class Star
 private:
     const int num_of_vertex;
     const int m_radius;
+    const int m_sizechanger;
     shape_t star;
     
 public:
     Star():
-    num_of_vertex{rand() % 10 + 4},
-
-    m_radius{rand() % 6 + 20}
-
+    num_of_vertex{rand() % 6 + 4},
+    m_radius{rand() % 10 + 10},
+    m_sizechanger{rand() % 2}
     {
         star.setPointCount(2 * num_of_vertex);
         float phi = 180.0/num_of_vertex*RAD;
@@ -25,16 +25,41 @@ public:
                                         m_radius/3*std::sin(phi*(m+1))));
         };
         star.setPosition(rand() % 500, rand() % 500);
-        star.setFillColor(color_t(rand()%256, rand()%256, rand()%256));
+        star.setFillColor(color_t(rand()%50, rand()%50, rand()%50));
     };
     
     shape_t getShape() const
     {
         return star;
     };
+    
+    void scale(float n)
+    {
+        star.setScale(n * m_sizechanger, n * m_sizechanger);
+    };
+    
 };
 
-const void draw (sf::RenderWindow& window, const Star& star)
+const void draw(sf::RenderWindow& window, const Star& star)
 {
     window.draw(star.getShape());
+};
+
+void resize(Star& star, float n)
+{
+        star.scale(n);
+};
+
+
+
+void animate(std::vector<Star>& stars_vector, int& counter)
+{
+    if(counter % 50 == 0)
+    {
+        for(Star& star_ex : stars_vector)
+        {
+            resize(star_ex, (counter% 100 == 0)?0.9:1.1);
+        };
+    }
+    counter++;
 };

@@ -14,8 +14,9 @@ int main()
     srand(time(0)); //for randomizing
     std::vector<Star> stars
     {
-        {}, {}, {}, {}, {}, {}, {}, {}
+        {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
     };
+    int counter = 0; //for animating
     
     std::vector<Planet> planets
     {
@@ -87,6 +88,9 @@ int main()
         }
 
         dog.update(acceleration, time);
+        
+    // [backgroud update]
+        animate(stars, counter);
 
     // [draw]
 
@@ -95,6 +99,7 @@ int main()
         {
             draw(window, star);
         }
+        
         draw(window, dog);
 
         for (const Planet& planet : planets)
