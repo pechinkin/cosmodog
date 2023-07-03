@@ -52,8 +52,10 @@ void resize(Star& star, float n)
 
 
 
-void animate(std::vector<Star>& stars_vector, int& counter)
+void animate(std::vector<Star>& stars_vector)
 {
+    static int counter = 0;
+
     if(counter % 50 == 0)
     {
         for(Star& star_ex : stars_vector)

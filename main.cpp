@@ -1,13 +1,16 @@
 #include <iostream>
-#include <SFML/Graphics.hpp>
-#include <SFML/System/Clock.hpp>
-#include <SFML/System/Time.hpp>
-#include "Point.hpp"
-#include "Planet.hpp"
-#include "Star.hpp"
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+
+#include <SFML/Graphics.hpp>
+#include <SFML/System/Clock.hpp>
+#include <SFML/System/Time.hpp>
+
+#include "Point.hpp"
+#include "Planet.hpp"
+#include "Star.hpp"
+#include "States.hpp"
 
 int main()
 {
@@ -16,8 +19,7 @@ int main()
     {
         {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
     };
-    int counter = 0; //for animating
-    
+
     std::vector<Planet> planets
     {
         {{80, 150}, 10, color_t{220, 220, 220}, 1000}, // Mercury
@@ -36,6 +38,9 @@ int main()
     sf::RenderWindow window(sf::VideoMode(500, 500), "cosmodog");
     window.setFramerateLimit(60);
     sf::Clock clock; //to measure time of the cycle
+
+    PlayScreen playScreen{planets, stars, dog};
+
     while (window.isOpen())
     {
     // [events]
@@ -69,43 +74,20 @@ int main()
             }
         }
 
-        dog.processInput(time);
+        playScreen.processInput(time);
 
     // [update model]
 
-        vector_t acceleration{};
-
-        vector_t dog_position = dog.getPosition();
-        for (const Planet& planet : planets)
-        {
-            if (AreIntersect(dog_position, planet.getPosition(), planet.getRadius()))
-            {
-                std::cout << "Game Over\n";
-                exit(1);
-            }
-
-            acceleration += planet.getAcceleration(dog_position);
-        }
-
-        dog.update(acceleration, time);
+        playScreen.update(time);
         
     // [backgroud update]
-        animate(stars, counter);
+        
 
     // [draw]
 
         window.clear();
-        for (const Star& star : stars)
-        {
-            draw(window, star);
-        }
         
-        draw(window, dog);
-
-        for (const Planet& planet : planets)
-        {
-            draw(window, planet);
-        }
+        playScreen.draw(window);
         
         window.display();
     }
