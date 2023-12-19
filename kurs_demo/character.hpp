@@ -15,10 +15,9 @@ class Dog {
     vector <Element> parts;
     Element ProcessPointPos(Element first, Element second);
     Element RotatePoint(Element pointToRotate, Element centerPoint, float angleDegrees);
-    float head_direction;
 public:
     Dog();                      //+
-    void Rotate(int degree);    //+
+    void MoveRotated(int degree);    //+
     void Move();                //+
     void AddPart();             //+
     void Draw();                //-
@@ -27,21 +26,24 @@ public:
 };
 
 Dog::Dog() {
-    head_direction = 0;
-    for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < 3; ++i) {
         parts.push_back(Element(i * DISTANCE, 0));
     }
 };
 
-void Dog::Rotate(int degree) {
-    head_direction += degree;
+void Dog::MoveRotated(int degree) {
+    for (size_t i = parts.size() - 1; i > 0; --i) {
+        parts[i].SetPos(parts[i - 1]);
+    }
+    parts[0].SetPos(RotatePoint(ProcessPointPos(parts[2], parts[1]), parts[1], degree));
+
 };
 
 void Dog::Move() {
     for (size_t i = parts.size() - 1; i > 0; --i) {
         parts[i].SetPos(parts[i - 1]);
     }
-    parts[0].SetPos(RotatePoint(ProcessPointPos(parts[2], parts[1]), parts[1], head_direction));
+    parts[0].SetPos(ProcessPointPos(parts[2], parts[1]));
 };
 
 void Dog::AddPart() {

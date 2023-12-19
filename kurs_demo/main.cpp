@@ -11,14 +11,23 @@ int main() {
     Dog Barsik;
     Barsik.Dump();
     
+    Barsik.Move();
+    Barsik.Dump();
+    
+    
+    Barsik.MoveRotated(90);
+    Barsik.Dump();
+    
+    Barsik.Move();
+    Barsik.Dump();
+    
+    Barsik.MoveRotated(-90);
+    Barsik.Dump();
+    
+    Barsik.Move();
+    Barsik.Dump();
+    
     Barsik.AddPart();
-    Barsik.Dump();
-    
-    Barsik.Move();
-    Barsik.Dump();
-    
-    Barsik.Rotate(90);
-    Barsik.Move();
     Barsik.Dump();
 
     return 0;
