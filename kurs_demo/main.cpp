@@ -4,7 +4,10 @@
 #include <cmath>
 
 using namespace std;
-
+#define HEIGHT 100
+#define WIDTH 100
+#define DISTANCE 20
+#define DELTA 0.3
 #include "character.hpp"
 #include "scene.hpp"
 

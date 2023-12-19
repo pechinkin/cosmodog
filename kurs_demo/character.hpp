@@ -1,7 +1,3 @@
-
-#define DISTANCE 20
-
-
 struct Element
 {
     float x, y;
@@ -11,7 +7,7 @@ struct Element
     float GetX() {return x;};
     float GetY() {return y;};
     bool operator==(const Element& other) const {
-        return x == other.x && y == other.y;
+        return abs(x - other.x) < DELTA && abs(y - other.y) < DELTA;
     };
 };
 
@@ -29,12 +25,13 @@ public:
     void Update();              //?is needed?
     void Dump();                    //+
     bool IsCollided(vector<Element> &arr);
+    bool IsOut();
 };
 
 Dog::Dog() {
     head_direction = 0;
     for (int i = 0; i < 3; ++i) {
-        parts.push_back(Element(i * DISTANCE, 0));
+        parts.push_back(Element(WIDTH/2 + i * DISTANCE, HEIGHT/2));
     }
 };
 
@@ -109,4 +106,12 @@ bool Dog::IsCollided(vector<Element> &arr) {
         }
     }
     return false;
+};
+
+bool Dog::IsOut() {
+    if ((parts[0].GetX() < 0 || parts[0].GetX() > HEIGHT) || (parts[0].GetY() < 0 || parts[0].GetY() > WIDTH)) {
+        return true;
+    } else {
+        return false;
+    }
 };
