@@ -3,9 +3,7 @@ struct Element
     float x, y;
     Element(float _x, float _y): x{_x}, y{_y} {};
     void SetPos(float _x, float _y) {x = _x; y = _y;};
-    void SetPos(Element another) {x = another.GetX(); y = another.GetY();};
-    float GetX() {return x;};
-    float GetY() {return y;};
+    void SetPos(Element another) {x = another.x; y = another.y;};
     bool operator==(const Element& other) const {
         return abs(x - other.x) < DELTA && abs(y - other.y) < DELTA;
     };
@@ -23,9 +21,10 @@ public:
     void AddPart();                 //+
     void Draw();                //?is needed?
     void Update();              //?is needed?
-    void Dump();                    //+
+    void Dump(int (&arr)[HEIGHT][WIDTH]);                    //+
     bool IsCollided(vector<Element> &arr);
     bool IsOut();
+    bool IsCollidedToItself();
 };
 
 Dog::Dog() {
@@ -56,17 +55,18 @@ void Dog::AddPart() {
     parts.push_back(ProcessPointPos(parts[last - 1], parts[last]));
 };
 
-void Dog::Dump()
+void Dog::Dump(int (&arr)[HEIGHT][WIDTH])
 {
     cout << endl;
-    for (size_t i = 0; i < parts.size(); ++i) {
-        cout << '[' << parts[i].GetX() << ';' << parts[i].GetY() << ']' << endl;
+    for (size_t i = 1; i < parts.size(); ++i) {
+        arr[(int)parts[i].y][(int)parts[i].x] = 1;
     }
+    arr[(int)parts[0].y][(int)parts[0].x] = 5;
 };
 
 Element Dog::ProcessPointPos(Element first, Element second) {
-    float x2 = first.GetX(), y2 = first.GetY();
-    float x1 = second.GetX(), y1 = second.GetY();
+    float x2 = first.x, y2 = first.y;
+    float x1 = second.x, y1 = second.y;
     float dx = x1 - x2;
     float dy = y1 - y2;
 
@@ -88,20 +88,21 @@ Element Dog::RotatePoint(Element pointToRotate, Element centerPoint, float angle
     float angleRadians = angleDegrees * M_PI / 180.0;
 
     // Найдите разницу между точкой и центральной точкой
-    float dx = pointToRotate.GetX() - centerPoint.GetX();
-    float dy = pointToRotate.GetY() - centerPoint.GetY();
+    float dx = pointToRotate.x - centerPoint.x;
+    float dy = pointToRotate.y - centerPoint.y;
 
     // Поверните точку относительно центральной точки
-    float rotatedX = centerPoint.GetX() + dx * cos(angleRadians) - dy * sin(angleRadians);
-    float rotatedY = centerPoint.GetY() + dx * sin(angleRadians) + dy * cos(angleRadians);
+    float rotatedX = centerPoint.x + dx * cos(angleRadians) - dy * sin(angleRadians);
+    float rotatedY = centerPoint.y + dx * sin(angleRadians) + dy * cos(angleRadians);
 
     Element rotatedPoint(rotatedX, rotatedY);
     return rotatedPoint;
 }
 
 bool Dog::IsCollided(vector<Element> &arr) {
-    for (size_t i = 0; i < arr.size(); ++i) {
-        if (parts[0] == arr[i]) {
+    for (auto it = arr.begin(); it != arr.end(); ++it) {
+        if (parts[0] == *it) {
+            arr.erase(it); // Erase the collided element from the vector
             return true;
         }
     }
@@ -109,9 +110,18 @@ bool Dog::IsCollided(vector<Element> &arr) {
 };
 
 bool Dog::IsOut() {
-    if ((parts[0].GetX() < 0 || parts[0].GetX() > HEIGHT) || (parts[0].GetY() < 0 || parts[0].GetY() > WIDTH)) {
+    if ((parts[0].x < 0 || parts[0].x > HEIGHT - DISTANCE - 2) || (parts[0].y < 0 || parts[0].y > WIDTH - DISTANCE - 2)) {
         return true;
     } else {
         return false;
     }
+};
+
+bool Dog::IsCollidedToItself() {
+    for (size_t i = 4; i < parts.size(); ++i) {
+        if (parts[0] == parts[i]) {
+            return true;
+        }
+    }
+    return false;
 };

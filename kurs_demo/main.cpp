@@ -2,18 +2,22 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <ctime>
+#include <thread>
+#include <atomic>
+#include <mutex>
 
 using namespace std;
-#define HEIGHT 100
-#define WIDTH 100
-#define DISTANCE 20
+#define HEIGHT 60
+#define WIDTH 60
+#define DISTANCE 2
 #define DELTA 0.3
 #include "character.hpp"
 #include "scene.hpp"
 
 int main() {
-    
-    Scene Dog_0Ast_1Food;
-    Dog_0Ast_1Food.Start();
+    srand((unsigned)time(0));
+    Scene MyScene;
+    MyScene.Start();
     return 0;
-}
+};
