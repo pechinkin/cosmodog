@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -5,30 +6,11 @@
 using namespace std;
 
 #include "character.hpp"
+#include "scene.hpp"
 
 int main() {
     
-    Dog Barsik;
-    Barsik.Dump();
-    
-    Barsik.Move();
-    Barsik.Dump();
-    
-    
-    Barsik.MoveRotated(90);
-    Barsik.Dump();
-    
-    Barsik.Move();
-    Barsik.Dump();
-    
-    Barsik.MoveRotated(-90);
-    Barsik.Dump();
-    
-    Barsik.Move();
-    Barsik.Dump();
-    
-    Barsik.AddPart();
-    Barsik.Dump();
-
+    Scene Dog_0Ast_1Food;
+    Dog_0Ast_1Food.Start();
     return 0;
 }

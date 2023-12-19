@@ -1,3 +1,4 @@
+
 #define DISTANCE 20
 
 
@@ -9,29 +10,36 @@ struct Element
     void SetPos(Element another) {x = another.GetX(); y = another.GetY();};
     float GetX() {return x;};
     float GetY() {return y;};
+    bool operator==(const Element& other) const {
+        return x == other.x && y == other.y;
+    };
 };
 
 class Dog {
+    int head_direction;
     vector <Element> parts;
     Element ProcessPointPos(Element first, Element second);
     Element RotatePoint(Element pointToRotate, Element centerPoint, float angleDegrees);
 public:
-    Dog();                      //+
-    void MoveRotated(int degree);    //+
-    void Move();                //+
-    void AddPart();             //+
-    void Draw();                //-
-    void Update();              //-
-    void Dump();                
+    Dog();                          //+
+    void MoveRotated(int degree);   //+
+    void Move();                    //+
+    void AddPart();                 //+
+    void Draw();                //?is needed?
+    void Update();              //?is needed?
+    void Dump();                    //+
+    bool IsCollided(vector<Element> &arr);
 };
 
 Dog::Dog() {
+    head_direction = 0;
     for (int i = 0; i < 3; ++i) {
         parts.push_back(Element(i * DISTANCE, 0));
     }
 };
 
 void Dog::MoveRotated(int degree) {
+    head_direction += degree;
     for (size_t i = parts.size() - 1; i > 0; --i) {
         parts[i].SetPos(parts[i - 1]);
     }
@@ -93,3 +101,12 @@ Element Dog::RotatePoint(Element pointToRotate, Element centerPoint, float angle
     Element rotatedPoint(rotatedX, rotatedY);
     return rotatedPoint;
 }
+
+bool Dog::IsCollided(vector<Element> &arr) {
+    for (size_t i = 0; i < arr.size(); ++i) {
+        if (parts[0] == arr[i]) {
+            return true;
+        }
+    }
+    return false;
+};
