@@ -143,13 +143,15 @@ struct Scene {
             if (cin >> c) {
                 {
                     std::lock_guard<std::mutex> lock(mtx);
-                    if (c == 's') {
-                        MyDog.MoveRotated(90);
-                    } else if (c == 'd') {
-                        MyDog.MoveRotated(-90);
-                    } else if (c == 'q') {
+                    if (c == 'q') {
                         running = false;
                     }
+//                    else if (c == 'd') {
+//                        MyDog.MoveRotated(-90);
+//                    } else if (c == 'q') {
+//                        running = false;
+//                    } 
+                        MyDog.processInput(c);
                 }
             }
         }

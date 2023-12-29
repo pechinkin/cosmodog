@@ -16,6 +16,7 @@ class Dog {
     Element RotatePoint(Element pointToRotate, Element centerPoint, float angleDegrees);
 public:
     Dog();                          //+
+    void processInput(char c);
     void MoveRotated(int degree);   //+
     void Move();                    //+
     void AddPart();                 //+
@@ -30,12 +31,37 @@ public:
 Dog::Dog() {
     head_direction = 0;
     for (int i = 0; i < 3; ++i) {
-        parts.push_back(Element(WIDTH/2 + i * DISTANCE, HEIGHT/2));
+        parts.push_back(Element(WIDTH/2 - i * DISTANCE, HEIGHT/2));
     }
 };
 
+void Dog::processInput(char c) {
+
+    if ((head_direction == 0 && c == 'w')   ||
+        (head_direction == 90 && c == 'a')  ||
+        (head_direction == 180 && c == 's') ||
+        (head_direction == 270 && c == 'd'))
+    {
+        MoveRotated(-90);
+    } else
+    if ((head_direction == 0 && c == 's')   ||
+        (head_direction == 90 && c == 'd')  ||
+        (head_direction == 180 && c == 'w') ||
+        (head_direction == 270 && c == 'a'))
+          {
+              MoveRotated(90);
+          }
+};
+
 void Dog::MoveRotated(int degree) {
-    head_direction += degree;
+    head_direction -= degree;
+    if (head_direction >= 360) {
+        head_direction %= 360;
+    }
+    if (head_direction < 0) {
+        head_direction %= 360;
+        head_direction += 360;
+    }
     for (size_t i = parts.size() - 1; i > 0; --i) {
         parts[i].SetPos(parts[i - 1]);
     }
